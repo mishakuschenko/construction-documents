@@ -1,7 +1,7 @@
-def main():
-    print("Hello from construction-documents!")
+from bot import start_bot
 
+from asyncio import run
 
 if __name__ == "__main__":
-    main()
+    run(start_bot())
 
