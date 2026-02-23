@@ -8,15 +8,18 @@ from aiogram import Bot, Dispatcher
 
 load_dotenv()
 
-API_TOKEN: str = getenv("API_TOKEN")
+API_TOKEN: str | None = getenv("API_TOKEN")
 
 async def start_bot() -> None:
-    bot: Bot = Bot(API_TOKEN)
+    if API_TOKEN is not None:
+        bot: Bot = Bot(API_TOKEN)
 
-    dp = Dispatcher()
+        dp = Dispatcher()
 
-    dp.include_routers(main_router)
-    print("bot")
+        dp.include_routers(main_router)
 
-    await dp.start_polling(bot)
+        await dp.start_polling(bot)
+
+    else:
+        print("Failed to connect with Bot -> Invalid API token")
 
