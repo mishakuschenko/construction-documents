@@ -4,32 +4,19 @@ from oauth2client.service_account import ServiceAccountCredentials
 from dotenv import load_dotenv
 from os import getenv
 
-load_dotenv()
+from . import cfg
 
-scope = [
-    "https://spreadsheets.google.com/feeds",
-    "https://www.googleapis.com/auth/drive"
-]
 
-creds = ServiceAccountCredentials.from_json_keyfile_name("./stroi-dok-716732eaeb24.json", scope)
-client = gspread.authorize(creds)
+def connect_list(list_name: int):
+    return cfg.spreadsheet.get_worksheet(list_name)
 
-SHEET_ID = getenv("SPREADSHEEET_ID") 
-spreadsheet = client.open_by_key(SHEET_ID)
 
-sheet = spreadsheet.get_worksheet(0)
+def insert_data(list_name: int, data: list):
+    sheet = connect_list(list_name)
+    try:
+        sheet.append_row(data, value_input_option='USER_ENTERED')
+        print(f"Данные {data} успешно добавлены в лист {list_name}!")
+    except gspread.exceptions.APIError as e:
+        print(f"Ошибка API при добавлении данных: {e}")
+        print("Проверьте, дали ли вы доступ (Share) email-адресу сервисного аккаунта!")
 
-try:
-    all_data = sheet.get_all_values()
-    print("Данные из таблицы:", all_data)
-
-    sheet.append_row(
-        ["Тест", "Бот", "Успешно!"], 
-        value_input_option='USER_ENTERED'
-    )
-
-    print("Тестовая строка успешно добавлена!")
-
-except gspread.exceptions.APIError as e:
-    print(f"Ошибка API: {e}")
-    print("Проверьте, дали ли вы доступ (Share) email-адресу сервисного аккаунта!")

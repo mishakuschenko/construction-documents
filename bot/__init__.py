@@ -14,12 +14,11 @@ async def start_bot() -> None:
     if API_TOKEN is not None:
         bot: Bot = Bot(API_TOKEN)
 
+        print("Ключ загружен успешно!")
+
         dp = Dispatcher()
 
         dp.include_routers(main_router)
 
         await dp.start_polling(bot)
-
-    else:
-        print("Failed to connect with Bot -> Invalid API token")
 
