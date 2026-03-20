@@ -20,4 +20,4 @@ async def cmd_help(m: Message):
 async def insert_data_handler(m: Message):
     data = m.text.split(",")
     insert_data(0, data)
-    await m.answer("Данные успешно добавлены в таблицу!")
+    await m.answer("Data has been successfully added to the table!")
